@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For Tithu 💖</title>
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body{
+  height:100vh;
+  overflow:hidden;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background: linear-gradient(135deg, #fde2f3, #e0c3fc, #fbc2eb, #fcd5ce);
+  position:relative;
+}
+
+/* ========== LOAD ANIMATION ========== */
+.load-screen{
+  position:fixed;
+  inset:0;
+  z-index:10;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  background: linear-gradient(145deg, #ffd6e8 0%, #e8c4f0 40%, #ffb5d0 100%);
+  animation: loadScreenOut 0.8s ease 2.6s forwards;
+  pointer-events:none;
+}
+
+.load-screen .intro-heart{
+  font-size: 80px;
+  margin-bottom: 20px;
+  animation: heartPop 1s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s both;
+  filter: drop-shadow(0 4px 20px rgba(184, 50, 128, 0.35));
+}
+
+.load-screen .intro-title{
+  font-size: 2.2rem;
+  font-weight: 600;
+  color: #9d174d;
+  letter-spacing: 2px;
+  animation: titleReveal 0.9s ease 0.5s both;
+  text-shadow: 0 2px 10px rgba(255,255,255,0.6);
+}
+
+.load-screen .intro-sub{
+  font-size: 1.1rem;
+  color: #b83280;
+  margin-top: 12px;
+  opacity: 0;
+  animation: titleReveal 0.8s ease 1s both;
+}
+
+.load-screen .intro-hearts{
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.load-screen .intro-hearts span{
+  position: absolute;
+  font-size: 24px;
+  opacity: 0;
+  animation: introFloat 2s ease-in-out infinite;
+}
+
+@keyframes heartPop{
+  0%{
+    transform: scale(0) rotate(-20deg);
+    opacity: 0;
+  }
+  60%{
+    transform: scale(1.15) rotate(5deg);
+    opacity: 1;
+  }
+  100%{
+    transform: scale(1) rotate(0);
+    opacity: 1;
+  }
+}
+
+@keyframes titleReveal{
+  from{
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to{
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes introFloat{
+  0%, 100%{
+    transform: translateY(0) scale(0.8);
+    opacity: 0.3;
+  }
+  50%{
+    transform: translateY(-15px) scale(1.1);
+    opacity: 0.7;
+  }
+}
+
+@keyframes loadScreenOut{
+  to{
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+/* Floating Hearts */
+.heart{
+  position:absolute;
+  font-size:20px;
+  animation: floatUp linear infinite;
+  opacity:0;
+  pointer-events:none;
+}
+
+@keyframes floatUp{
+  0%{
+    transform:translateY(100vh) scale(0.8);
+    opacity:0;
+  }
+  20%{ opacity:1; }
+  100%{
+    transform:translateY(-10vh) scale(1.4);
+    opacity:0;
+  }
+}
+
+/* Card */
+.card{
+  background: rgba(255,255,255,0.35);
+  backdrop-filter: blur(18px);
+  padding:60px 50px;
+  border-radius:30px;
+  text-align:center;
+  box-shadow:0 15px 40px rgba(0,0,0,0.15);
+  animation: fadeIn 1s ease 2.2s forwards;
+  transform: scale(0.9);
+  opacity:0;
+  position:relative;
+  z-index:2;
+}
+
+@keyframes fadeIn{
+  to{
+    transform:scale(1);
+    opacity:1;
+  }
+}
+
+/* Greeting */
+.greeting{
+  font-size:28px;
+  color:#b83280;
+  margin-bottom:15px;
+  animation: slideDown 0.8s ease 2.4s forwards;
+  opacity:0;
+}
+
+@keyframes slideDown{
+  from{
+    transform:translateY(-20px);
+    opacity:0;
+  }
+  to{
+    transform:translateY(0);
+    opacity:1;
+  }
+}
+
+/* Question */
+h1{
+  font-size:36px;
+  color:#9d174d;
+  margin-bottom:30px;
+}
+
+/* Buttons */
+.buttons{
+  display:flex;
+  justify-content:center;
+  gap:20px;
+}
+
+button{
+  padding:12px 28px;
+  border:none;
+  border-radius:50px;
+  font-size:16px;
+  cursor:pointer;
+  transition:0.3s ease;
+}
+
+/* Yes */
+.yes-btn{
+  background:linear-gradient(45deg,#ff6fa5,#ff758c);
+  color:white;
+  box-shadow:0 8px 20px rgba(255,105,135,0.4);
+}
+
+.yes-btn:hover{
+  transform:scale(1.1);
+}
+
+/* No */
+.no-btn{
+  background:white;
+  border:2px solid #ff9bb3;
+  color:#9d174d;
+  position:relative;
+}
+
+/* Message */
+.message{
+  margin-top:20px;
+  font-size:20px;
+  color:#c2185b;
+  display:none;
+}
+
+/* Bottom message: shown only after Yes is clicked */
+.bottom-message{
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 25;
+  margin: 0;
+  padding: 16px 24px;
+  text-align: center;
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #fff;
+  background: linear-gradient(90deg, rgba(157,23,77,0.92), rgba(194,24,91,0.92));
+  box-shadow: 0 -4px 24px rgba(157,23,77,0.35);
+  text-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  letter-spacing: 0.5px;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.4s ease, visibility 0.4s ease;
+}
+.bottom-message.show{
+  opacity: 1;
+  visibility: visible;
+}
+
+/* ========== ENVELOPE OVERLAY ========== */
+.envelope-overlay{
+  position:fixed;
+  inset:0;
+  z-index:20;
+  background: rgba(0,0,0,0.45);
+  backdrop-filter: blur(8px);
+  display:none;
+  visibility: hidden;
+  justify-content:center;
+  align-items:center;
+  opacity:0;
+  transition: opacity 0.4s ease;
+}
+.envelope-overlay.show{
+  display:flex;
+  visibility: visible;
+  opacity:1;
+}
+
+/* Photos: start at center, fly to scattered positions one by one */
+.envelope-photos{
+  position: fixed;
+  inset: 0;
+  z-index: 22;
+  pointer-events: none;
+}
+.envelope-photos.show{
+  pointer-events: auto;
+}
+.envelope-photos .envelope-photo{
+  position: absolute;
+  width: 260px;
+  height: 260px;
+  left: 50%;
+  top: 50%;
+  margin-left: -130px;
+  margin-top: -130px;
+  border-radius: 20px;
+  object-fit: cover;
+  box-shadow: 0 12px 40px rgba(157,23,77,0.3);
+  border: 4px solid rgba(255,255,255,0.95);
+  opacity: 0;
+  visibility: hidden;
+  transform: translate(0, 0) scale(0.2) rotate(-12deg);
+  animation: photoReveal 1s cubic-bezier(0.34, 1.2, 0.64, 1) forwards;
+  cursor: pointer;
+}
+.envelope-photos.show .envelope-photo{
+  visibility: visible;
+}
+.envelope-photos .envelope-photo.dance{
+  animation: photoDance 0.6s ease-in-out;
+}
+.envelope-photos .envelope-photo.revealed{
+  opacity: 1;
+}
+.envelope-photos.show .envelope-photo:nth-child(1){ animation-delay: 0.2s; }
+.envelope-photos.show .envelope-photo:nth-child(2){ animation-delay: 0.6s; }
+.envelope-photos.show .envelope-photo:nth-child(3){ animation-delay: 1s; }
+.envelope-photos.show .envelope-photo:nth-child(4){ animation-delay: 1.4s; }
+.envelope-photos.show .envelope-photo:nth-child(5){ animation-delay: 1.8s; }
+.envelope-photos.show .envelope-photo:nth-child(6){ animation-delay: 2.2s; }
+
+@keyframes photoReveal{
+  0%{
+    opacity: 0;
+    transform: translate(0, 0) scale(0.2) rotate(-12deg);
+    filter: blur(8px);
+  }
+  50%{
+    opacity: 1;
+    filter: blur(0);
+  }
+  70%{
+    transform: translate(var(--dx), var(--dy)) scale(1.08) rotate(2deg);
+  }
+  100%{
+    opacity: 1;
+    transform: translate(var(--dx), var(--dy)) scale(1) rotate(0deg);
+    filter: blur(0);
+  }
+}
+
+.envelope-photos.show .envelope-photo:hover{
+  transform: translate(var(--dx), var(--dy)) scale(1.06);
+  box-shadow: 0 16px 48px rgba(157,23,77,0.4);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  animation: none;
+}
+
+/* Gentle float after photos have landed */
+.envelope-photos.show .envelope-photo{
+  animation: photoReveal 1s cubic-bezier(0.34, 1.2, 0.64, 1) forwards,
+             photoFloat 4s ease-in-out 2.8s infinite;
+}
+.envelope-photos.show .envelope-photo:nth-child(odd){
+  animation: photoReveal 1s cubic-bezier(0.34, 1.2, 0.64, 1) forwards,
+             photoFloat 4s ease-in-out 2.8s infinite alternate;
+}
+.envelope-photos.show .envelope-photo:nth-child(even){
+  animation: photoReveal 1s cubic-bezier(0.34, 1.2, 0.64, 1) forwards,
+             photoFloat 4s ease-in-out 2.8s infinite alternate-reverse;
+}
+@keyframes photoFloat{
+  0%, 100%{ transform: translate(var(--dx), var(--dy)) scale(1); }
+  50%{ transform: translate(var(--dx), calc(var(--dy) - 8px)) scale(1); }
+}
+
+@keyframes photoDance{
+  0%, 100%{ transform: translate(var(--dx), var(--dy)) scale(1) rotate(0deg); }
+  15%{ transform: translate(var(--dx), var(--dy)) scale(1.05) rotate(-4deg); }
+  30%{ transform: translate(var(--dx), var(--dy)) scale(1.05) rotate(4deg); }
+  45%{ transform: translate(var(--dx), var(--dy)) scale(1.05) rotate(-3deg); }
+  60%{ transform: translate(var(--dx), var(--dy)) scale(1.05) rotate(3deg); }
+  75%{ transform: translate(var(--dx), var(--dy)) scale(1.02) rotate(-1deg); }
+}
+
+/* Celebration emojis on photo click */
+.celebration-emoji{
+  position: fixed;
+  pointer-events: none;
+  z-index: 30;
+  font-size: 28px;
+  animation: celebrateOut 1.2s ease-out forwards;
+}
+@keyframes celebrateOut{
+  0%{
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(0.5);
+  }
+  30%{
+    opacity: 1;
+  }
+  100%{
+    opacity: 0;
+    transform: translate(calc(-50% + var(--ex)), calc(-50% + var(--ey))) scale(1.2);
+  }
+}
+
+/* Hidden YouTube iframe (plays in background) */
+.youtube-music-wrap{
+  position: fixed;
+  left: -9999px;
+  top: 0;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+.youtube-music-wrap iframe{
+  width: 1px;
+  height: 1px;
+  border: none;
+}
+
+/* Rotating music disc */
+.music-disc{
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 15;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, #2d2d2d, #0a0a0a 60%);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.4), inset 0 0 0 2px #444, inset 0 0 0 8px #1a1a1a;
+  animation: discRotate 3s linear infinite;
+  flex-shrink: 0;
+}
+.music-disc::before{
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 14px;
+  height: 14px;
+  margin: -7px 0 0 -7px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ff9ebb, #c2185b);
+  box-shadow: 0 0 0 2px #1a1a1a, inset 0 1px 1px rgba(255,255,255,0.3);
+}
+@keyframes discRotate{
+  from{ transform: rotate(0deg); }
+  to{ transform: rotate(360deg); }
+}
+</style>
+</head>
+
+<body>
+
+<!-- Background music (default on) -->
+<audio id="bgMusic" loop preload="none"></audio>
+<!-- YouTube playlist: hidden, loads and plays by default. Set YOUTUBE_PLAYLIST_ID in script. -->
+<div class="youtube-music-wrap" id="youtubeMusicWrap">
+  <iframe id="youtubePlaylistIframe" title="YouTube playlist" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+</div>
+<div class="music-disc" id="musicDisc" title="Music playing" aria-hidden="true"></div>
+
+<!-- Load animation -->
+<div class="load-screen" id="loadScreen">
+  <div class="intro-hearts" id="introHearts"></div>
+  <div class="intro-heart">💖</div>
+  <div class="intro-title">For Tithu</div>
+  <div class="intro-sub">Happy Valentine's Day</div>
+</div>
+
+<div class="card">
+  <div class="greeting">Hi Tithu… 💗</div>
+  <h1>Will You Be My Valentine? 💖</h1>
+
+  <div class="buttons">
+    <button class="yes-btn" onclick="sayYes()">Yes 💕</button>
+    <button class="no-btn" id="noBtn">No 🙈</button>
+  </div>
+
+  <div class="message" id="msg">
+    You just made my heart the happiest person alive ✨💞
+  </div>
+</div>
+
+<!-- Bottom message: always visible -->
+<p class="bottom-message" id="bottomMessage">Thank you for being in my life</p>
+
+<!-- Photos overlay (on Yes) -->
+<div class="envelope-overlay" id="envelopeOverlay">
+  <div class="envelope-photos" id="envelopePhotos">
+    <img class="envelope-photo" data-src="https://photos.fife.usercontent.google.com/pw/AP1GczOnj4ACBwqNvNm4vwkr8TuqNwaFmGzWoEolZisUp1NNoOjx3Y_BwskMzA=w709-h945-s-no-gm?authuser=0" alt="Photo 1">
+    <img class="envelope-photo" data-src="https://photos.fife.usercontent.google.com/pw/AP1GczMUXfU1PN9KdVj9VXQXlhNWRPT5Qo0-jWP_fAiOn526hACTWDgmG-jXjA=w532-h945-s-no-gm?authuser=0" alt="Photo 2">
+    <img class="envelope-photo" data-src="https://photos.fife.usercontent.google.com/pw/AP1GczPVc-iVvu7KzUhm2fuN71RPm3HyTX3DJgKHOmsJe2DDNrAtNHrrk8kgzg=w532-h945-s-no-gm?authuser=0" alt="Photo 3">
+    <img class="envelope-photo" data-src="https://photos.fife.usercontent.google.com/pw/AP1GczNTwBqHlKXbm8FqQVidDx2o_AW_5aNiwfws4MQrwLoC5tT9oqUvsXuTTg=w709-h945-s-no-gm?authuser=0" alt="Photo 4">
+    <img class="envelope-photo" data-src="https://photos.fife.usercontent.google.com/pw/AP1GczPDYpTjRh4LBuneMiU2jjSmU2_6QjKyjS_2yPkkDTCzmhmVVFEW8ksicg=w709-h945-s-no-gm?authuser=0" alt="Photo 5">
+    <img class="envelope-photo" data-src="https://photos.fife.usercontent.google.com/pw/AP1GczNGndG7_oeYYLK_j3LV3Svwrw_hLmxLwUWjUFMkU6zI2EDrCjRLD1lNqQ=w709-h945-s-no-gm?authuser=0" alt="Photo 6">
+  </div>
+</div>
+
+<script>
+
+/* Load screen: decorative hearts */
+(function(){
+  const container = document.getElementById("introHearts");
+  const symbols = ["💕", "💗", "💘", "💝", "✨"];
+  for (let i = 0; i < 12; i++) {
+    const s = document.createElement("span");
+    s.textContent = symbols[i % symbols.length];
+    s.style.left = Math.random() * 100 + "%";
+    s.style.top = Math.random() * 100 + "%";
+    s.style.animationDelay = (Math.random() * 1.2) + "s";
+    s.style.animationDuration = (1.8 + Math.random() * 0.8) + "s";
+    container.appendChild(s);
+  }
+})();
+
+/* Floating Hearts */
+function createHearts(){
+  const emojis = ["💖","💗","💘","💝","💕"];
+  for(let i=0;i<35;i++){
+    let heart = document.createElement("div");
+    heart.classList.add("heart");
+    heart.innerHTML = emojis[Math.floor(Math.random()*emojis.length)];
+    heart.style.left = Math.random()*100 + "vw";
+    heart.style.animationDuration = (5 + Math.random()*5) + "s";
+    heart.style.fontSize = (15 + Math.random()*25) + "px";
+    document.body.appendChild(heart);
+  }
+}
+createHearts();
+
+/* Arc positions: count points along ellipse, shifted up to leave space at bottom */
+function arcPositions(count, offsetYVh){
+  const rx = 36;
+  const ry = 16;
+  const startDeg = 145;
+  const endDeg = 35;
+  const offset = offsetYVh != null ? offsetYVh : 0;
+  const positions = [];
+  for (let i = 0; i < count; i++) {
+    const t = count <= 1 ? 0.5 : i / (count - 1);
+    const angleDeg = startDeg - t * (startDeg - endDeg);
+    const angle = (angleDeg * Math.PI) / 180;
+    const dx = rx * Math.cos(angle);
+    const dy = -ry * Math.sin(angle) + offset;
+    positions.push({ dx: dx + "vw", dy: dy + "vh" });
+  }
+  return positions;
+}
+
+/* Yes Button: show 6 photos in arc stack (elliptical, shifted up) */
+function sayYes(){
+  const overlay = document.getElementById("envelopeOverlay");
+  const photos = document.getElementById("envelopePhotos");
+  const photoEls = photos.querySelectorAll(".envelope-photo");
+  const layout = arcPositions(6, -4);
+  photoEls.forEach((el) => {
+    var url = el.getAttribute("data-src");
+    if (url) el.src = url;
+  });
+  overlay.classList.add("show");
+  overlay.style.display = "flex";
+  var bottomMsg = document.getElementById("bottomMessage");
+  if (bottomMsg) bottomMsg.classList.add("show");
+  photos.classList.remove("show");
+  photoEls.forEach((el, i) => {
+    const pos = layout[i];
+    el.style.setProperty("--dx", pos.dx);
+    el.style.setProperty("--dy", pos.dy);
+  });
+  requestAnimationFrame(() => {
+    photos.classList.add("show");
+  });
+  setTimeout(() => {
+    photoEls.forEach((el) => el.classList.add("revealed"));
+  }, 3500);
+  try {
+    var y = document.getElementById("youtubePlaylistIframe");
+    if ((!y || !y.src) && typeof tryLoadAndPlay === "function") tryLoadAndPlay();
+  } catch(e) {}
+}
+document.getElementById("envelopeOverlay").addEventListener("click", function(e){
+  if (e.target === this){
+    this.classList.remove("show");
+    this.style.display = "none";
+  }
+});
+
+/* Music: default on. YouTube (hidden) loads and plays; HTML5 audio fallback. */
+var bgMusic = document.getElementById("bgMusic");
+bgMusic.volume = 1.0;
+var musicWantPlay = true;
+var musicSourceIndex = 0;
+var musicStarted = false;
+var MUSIC_SOURCES = [
+  "music.mp3",
+  "https://www.soundhelix.com/audio-examples/mp3/SoundHelix-Song-1.mp3",
+  "https://interactive-examples.mdn.mozilla.net/media/cc0-audio/t-rex-roar.mp3"
+];
+function tryNextSource(){
+  musicSourceIndex++;
+  if (musicSourceIndex >= MUSIC_SOURCES.length) return;
+  musicWantPlay = true;
+  bgMusic.src = MUSIC_SOURCES[musicSourceIndex];
+  bgMusic.load();
+}
+function tryLoadAndPlay(){
+  musicWantPlay = true;
+  if (bgMusic.src && bgMusic.readyState >= 2) {
+    bgMusic.play().catch(function(){ tryNextSource(); });
+    return;
+  }
+  if (musicSourceIndex >= MUSIC_SOURCES.length) return;
+  bgMusic.src = MUSIC_SOURCES[musicSourceIndex];
+  bgMusic.load();
+}
+bgMusic.addEventListener("error", tryNextSource);
+bgMusic.addEventListener("canplaythrough", function(){
+  if (musicWantPlay && bgMusic.paused) bgMusic.play().catch(function(){ tryNextSource(); });
+});
+
+/* YouTube playlist: hidden iframe, load and autoplay by default */
+var YOUTUBE_PLAYLIST_ID = "PL-p6-8_d9RdUh0UEqL6vZ3jyJk-GtN799";
+function getYoutubePlaylistId(){
+  var s = (YOUTUBE_PLAYLIST_ID || "").trim();
+  var m = s.match(/[?&]list=([^&]+)/);
+  return m ? m[1] : s;
+}
+function startMusicDefault(){
+  if (musicStarted) return;
+  musicStarted = true;
+  var youtubeIframe = document.getElementById("youtubePlaylistIframe");
+  var id = getYoutubePlaylistId();
+  if (youtubeIframe && id && id !== "YOUR_PLAYLIST_ID") {
+    youtubeIframe.src = "https://www.youtube.com/embed/videoseries?list=" + id + "&autoplay=1";
+  } else {
+    tryLoadAndPlay();
+  }
+}
+startMusicDefault();
+document.body.addEventListener("click", function tryOnce(){
+  document.body.removeEventListener("click", tryOnce);
+  var y = document.getElementById("youtubePlaylistIframe");
+  if (!y || !y.src) tryLoadAndPlay();
+}, { once: true });
+
+/* Photo click: dance + celebration emojis */
+const celebrationEmojis = ["😘", "💋", "💗", "✨", "💝"];
+function spawnCelebration(x, y){
+  const count = 16;
+  for (let i = 0; i < count; i++) {
+    const el = document.createElement("div");
+    el.className = "celebration-emoji";
+    el.textContent = celebrationEmojis[Math.floor(Math.random() * celebrationEmojis.length)];
+    el.style.left = x + "px";
+    el.style.top = y + "px";
+    const angle = (i / count) * Math.PI * 2 + Math.random() * 0.5;
+    const dist = 60 + Math.random() * 80;
+    el.style.setProperty("--ex", Math.cos(angle) * dist + "px");
+    el.style.setProperty("--ey", Math.sin(angle) * dist + "px");
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 1300);
+  }
+}
+document.getElementById("envelopePhotos").addEventListener("click", function(e){
+  const photo = e.target.closest(".envelope-photo");
+  if (!photo) return;
+  const rect = photo.getBoundingClientRect();
+  const x = rect.left + rect.width / 2;
+  const y = rect.top + rect.height / 2;
+  spawnCelebration(x, y);
+  photo.classList.remove("dance");
+  void photo.offsetWidth;
+  photo.classList.add("dance");
+  photo.addEventListener("animationend", function once(){
+    photo.classList.remove("dance");
+    photo.removeEventListener("animationend", once);
+  });
+});
+
+/* No button: slides away so cursor stays off it (not clickable) */
+const noBtn = document.getElementById("noBtn");
+var noBtnOffsetX = 0, noBtnOffsetY = 0;
+
+function updateNoBtn(e) {
+  const rect = noBtn.getBoundingClientRect();
+  const btnCenterX = rect.left + rect.width / 2;
+  const btnCenterY = rect.top + rect.height / 2;
+  const cursorX = e.clientX;
+  const cursorY = e.clientY;
+  const dirX = btnCenterX - cursorX;
+  const dirY = btnCenterY - cursorY;
+  const distance = Math.sqrt(dirX * dirX + dirY * dirY) || 1;
+  const halfSize = Math.max(rect.width, rect.height) / 2;
+  const gap = 28;
+  const minDistance = halfSize + gap;
+  if (distance < minDistance) {
+    const push = minDistance - distance;
+    noBtnOffsetX = (dirX / distance) * push;
+    noBtnOffsetY = (dirY / distance) * push;
+  } else {
+    noBtnOffsetX *= 0.9;
+    noBtnOffsetY *= 0.9;
+  }
+  noBtn.style.transform = "translate(" + noBtnOffsetX + "px, " + noBtnOffsetY + "px)";
+}
+
+noBtn.addEventListener("mousemove", updateNoBtn);
+document.addEventListener("mousemove", function(e) {
+  const rect = noBtn.getBoundingClientRect();
+  const btnCenterX = rect.left + rect.width / 2;
+  const btnCenterY = rect.top + rect.height / 2;
+  const dist = Math.hypot(e.clientX - btnCenterX, e.clientY - btnCenterY);
+  if (dist > Math.max(rect.width, rect.height) + 50) {
+    noBtnOffsetX *= 0.92;
+    noBtnOffsetY *= 0.92;
+    noBtn.style.transform = "translate(" + noBtnOffsetX + "px, " + noBtnOffsetY + "px)";
+  }
+});
+
+</script>
+
+</body>
+</html>
